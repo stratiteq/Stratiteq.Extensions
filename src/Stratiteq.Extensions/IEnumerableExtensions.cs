@@ -12,7 +12,6 @@ namespace Stratiteq.Extensions
         /// <summary>
         /// Check if all items are equal. Non-generic version.
         /// </summary>
-        /// <typeparam name="T">Type of elements.</typeparam>
         /// <param name="values">Collection to iterate.</param>
         /// <param name="value">The value to check if all are equal to.</param>
         public static bool AllEqual(this IEnumerable<int> values, int value)

@@ -11,11 +11,10 @@
   <PropertyGroup>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <IsPackable>false</IsPackable>
-    <Authors></Authors>
-    <PackageLicenseExpression></PackageLicenseExpression>
+    <IsPackable>true</IsPackable>
+    <Authors>Stratiteq Sweden AB</Authors>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
-    <PublishRepositoryUrl>false</PublishRepositoryUrl>
     <RootNamespace>Stratiteq.Extensions</RootNamespace>
   </PropertyGroup>
   
