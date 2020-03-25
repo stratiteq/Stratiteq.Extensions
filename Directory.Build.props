@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)settings/project.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>$(OutputPath)\$(Configuration)\$(MSBuildProjectName).xml</DocumentationFile>
-    <GenerateDocumentationFile />
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
 
