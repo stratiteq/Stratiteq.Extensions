@@ -76,6 +76,12 @@ stages:
 
     - download: current
       artifact: 'packages'
+
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '5.*'
+        checkLatest: true
+
     - task: NuGetCommand@2
       displayName: 'Push NuGet Package'
       inputs:
@@ -84,6 +90,7 @@ stages:
         nuGetFeedType: 'internal'
         publishVstsFeed: 'SQ-Internal-OpenSource-Feed'
         allowPackageConflicts: true
+        nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
 
 - stage: 'PublishReleaseNuGetPackage'
   displayName: 'Publish Release NuGet Package'
@@ -110,4 +117,4 @@ stages:
              packagesToPush: '$(Pipeline.Workspace)/packages/releases/*.nupkg;$(Pipeline.Workspace)/packages/releases/*.snupkg'
              nuGetFeedType: 'external'
              publishFeedCredentials: 'nuget.org'
-             allowPackageConflicts: true
+             nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
