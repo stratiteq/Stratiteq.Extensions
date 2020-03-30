@@ -21,9 +21,7 @@ stages:
       clean: all
 
     steps:
-    - script: echo $(MyRunNumber) # display MyRunNumber
-    - script: echo $(Build.BuildNumber) #display Run Number
-
+      
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
