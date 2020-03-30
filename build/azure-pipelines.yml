@@ -6,6 +6,15 @@
 trigger:
 - master
 
+# Set the build run name. If a this is a PR build prefix with PR otherwise CI.
+variables:
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    buildVersion: "PR-$(Build.BuildNumber)"
+  ${{ if ne(variables['Build.Reason'], 'PullRequest' ) }}:
+    buildVersion: "CI-$(Build.BuildNumber)"
+
+name: $(buildVersion)  # build run name
+
 stages:
 
 - stage: 'Build'
@@ -21,7 +30,7 @@ stages:
       clean: all
 
     steps:
-      
+
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
@@ -54,7 +63,7 @@ stages:
       displayName: 'Create NuGet Package - Prerelease Version'
       inputs:
         command: pack
-        buildProperties: 'VersionSuffix="CI-$(Build.BuildNumber)"'
+        buildProperties: 'VersionSuffix="$(buildVersion)"'
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/prereleases'
         arguments: '--configuration $(buildConfiguration)'
         
