@@ -10,11 +10,11 @@ trigger:
 variables:
 
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-    buildKey: PR
+    buildVariant: PR
   ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
-    buildKey: CI
+    buildVariant: CI
 
-name: $(buildKey)_$(Date:yyyyMMdd)$(Rev:.r)  # build run name
+name: $(buildVariant)_$(Date:yyyyMMdd)$(Rev:.r)  # build run name
 
 stages:
 
@@ -64,7 +64,7 @@ stages:
       displayName: 'Create NuGet Package - Prerelease Version'
       inputs:
         command: pack
-        buildProperties: 'VersionSuffix="$(buildVersion)"'
+        buildProperties: 'VersionSuffix="$(Build.BuildNumber)"'
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/prereleases'
         arguments: '--configuration $(buildConfiguration)'
         
