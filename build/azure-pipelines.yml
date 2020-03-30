@@ -3,8 +3,6 @@
 # YAML schema reference:
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
 
-name: 'CI_$(SourceVersion)_$(Date:yyyyMMdd)$(Rev:.r)'
-
 trigger:
 - master
 
@@ -21,9 +19,6 @@ stages:
 
     workspace:
       clean: all
-
-    variables: 
-      MyRunNumber: '$(Build.BuildNumber)'
 
     steps:
     - script: echo $(MyRunNumber) # display MyRunNumber
@@ -61,7 +56,7 @@ stages:
       displayName: 'Create NuGet Package - Prerelease Version'
       inputs:
         command: pack
-        buildProperties: 'VersionSuffix="$(MyRunNumber)"'
+        buildProperties: 'VersionSuffix="CI-$(Build.BuildNumber)"'
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/prereleases'
         arguments: '--configuration $(buildConfiguration)'
         
