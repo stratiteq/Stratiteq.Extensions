@@ -14,7 +14,7 @@ variables:
   ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
     buildVariant: CI
 
-name: $(buildVariant)_$(Date:yyyyMMdd)$(Rev:.r)  # build run name
+name: $(buildVariant)-$(Date:yyyyMMdd)$(Rev:.r)  # build run name
 
 stages:
 
