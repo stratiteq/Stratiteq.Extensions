@@ -6,6 +6,16 @@
 trigger:
 - master
 
+# Set the build run name. If a this is a PR build prefix with PR otherwise CI.
+variables:
+
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    buildVariant: PR
+  ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    buildVariant: CI
+
+name: $(buildVariant)-$(Date:yyyyMMdd)$(Rev:.r)  # build run name
+
 stages:
 
 - stage: 'Build'
@@ -21,6 +31,7 @@ stages:
       clean: all
 
     steps:
+
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
@@ -95,7 +106,7 @@ stages:
 - stage: 'PublishReleaseNuGetPackage'
   displayName: 'Publish Release NuGet Package'
   dependsOn: 'PublishPrereleaseNuGetPackage'
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
   - deployment:
     pool:
@@ -117,4 +128,4 @@ stages:
              packagesToPush: '$(Pipeline.Workspace)/packages/releases/*.nupkg;$(Pipeline.Workspace)/packages/releases/*.snupkg'
              nuGetFeedType: 'external'
              publishFeedCredentials: 'nuget.org'
-             nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
+             nugetConfigPath: '$(Pipeline.Workspace)/NuGet.config'
