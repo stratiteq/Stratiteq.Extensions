@@ -9,7 +9,7 @@ trigger:
 # Set the build run name. If a this is a PR build prefix with PR otherwise CI.
 variables:
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-    buildVersion: ${{ format('{0}_{1}', "PR", variables['Build.BuildNumber']) }}
+    buildVersion: ${{ format('{0}_{1}', 'PR', variables['Build.BuildNumber']) }}
   ${{ if ne(variables['Build.Reason'], 'PullRequest' ) }}:
     buildVersion: 'CI-$(Build.BuildNumber)'
 
