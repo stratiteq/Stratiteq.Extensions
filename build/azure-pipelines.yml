@@ -3,7 +3,7 @@
 # YAML schema reference:
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
 
-name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+name: 'CI_$(SourceVersion)_$(Date:yyyyMMdd)$(Rev:.r)'
 
 trigger:
 - master
@@ -23,7 +23,7 @@ stages:
       clean: all
 
     variables: 
-      MyRunNumber: '1.0.0-CI-$(Build.BuildNumber)'
+      MyRunNumber: '$(Build.BuildNumber)'
 
     steps:
     - script: echo $(MyRunNumber) # display MyRunNumber
@@ -61,7 +61,7 @@ stages:
       displayName: 'Create NuGet Package - Prerelease Version'
       inputs:
         command: pack
-        buildProperties: 'VersionSuffix="$(Build.BuildNumber)"'
+        buildProperties: 'VersionSuffix="$(MyRunNumber)"'
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/prereleases'
         arguments: '--configuration $(buildConfiguration)'
         
@@ -125,4 +125,4 @@ stages:
              packagesToPush: '$(Pipeline.Workspace)/packages/releases/*.nupkg;$(Pipeline.Workspace)/packages/releases/*.snupkg'
              nuGetFeedType: 'external'
              publishFeedCredentials: 'nuget.org'
-             nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
+             nugetConfigPath: '$(Pipeline.Workspace)/NuGet.config'
