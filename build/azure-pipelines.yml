@@ -3,6 +3,8 @@
 # YAML schema reference:
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
 
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
 trigger:
 - master
 
@@ -20,7 +22,13 @@ stages:
     workspace:
       clean: all
 
+    variables: 
+      MyRunNumber: '1.0.0-CI-$(Build.BuildNumber)'
+
     steps:
+    - script: echo $(MyRunNumber) # display MyRunNumber
+    - script: echo $(Build.BuildNumber) #display Run Number
+
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
@@ -95,7 +103,7 @@ stages:
 - stage: 'PublishReleaseNuGetPackage'
   displayName: 'Publish Release NuGet Package'
   dependsOn: 'PublishPrereleaseNuGetPackage'
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
   - deployment:
     pool:
