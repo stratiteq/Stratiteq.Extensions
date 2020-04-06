@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Stratiteq.MicroserviceTemplate.Configurations
+namespace Stratiteq.Extensions.Configuration
 {
     public class CosmosDBConfiguration : IValidatableObject
     {
