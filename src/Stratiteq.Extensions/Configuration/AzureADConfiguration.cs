@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Stratiteq.MicroserviceTemplate.Configurations
+namespace Stratiteq.Extensions.Configuration
 {
     /// <summary>
     /// Contains the information needed to make authenticated requests to a web API protected with Azure Active Directory (and role based authentication).
