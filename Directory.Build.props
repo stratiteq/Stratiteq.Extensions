@@ -1,6 +1,10 @@
 <Project>
 
   <PropertyGroup>
+    <VersionPrefix>1.0.2</VersionPrefix>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)settings/project.ruleset</CodeAnalysisRuleSet>
     <NoWarn>1591</NoWarn>
@@ -25,11 +29,36 @@
     <DefineConstants>CODE_ANALYSIS</DefineConstants>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\sq-logo-black-64x64.png" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
   
   <ItemGroup Condition="!$(MSBuildProjectName.Contains('.Deployment'))">
       <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
       <AdditionalFiles Include="$(MSBuildThisFileDirectory)settings/stylecop.json">
         <Link>Properties\stylecop.json</Link>
     </AdditionalFiles>
+  </ItemGroup>
+
+  <PropertyGroup Label="Enable SourceLink Support">
+
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageProjectUrl>https://github.com/stratiteq/stratiteq.extensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stratiteq/stratiteq.extensions</RepositoryUrl>
+    <PackageIcon>sq-logo-black-64x64.png</PackageIcon>
+
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup Label="Enable SourceLink GitHub Support">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
