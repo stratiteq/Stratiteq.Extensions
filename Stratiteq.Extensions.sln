@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratiteq.Extensions.Crypto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratiteq.Extensions.Hosting", "src\Stratiteq.Extensions.Hosting\Stratiteq.Extensions.Hosting.csproj", "{B78E807E-7334-413F-81C1-9BDC0E2FDF1E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratiteq.Extensions.Configuration", "src\Stratiteq.Extensions.Configuration\Stratiteq.Extensions.Configuration.csproj", "{CBD4CE33-3E4F-480B-9993-01731455212F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,18 @@ Global
 		{B78E807E-7334-413F-81C1-9BDC0E2FDF1E}.Release|x64.Build.0 = Release|Any CPU
 		{B78E807E-7334-413F-81C1-9BDC0E2FDF1E}.Release|x86.ActiveCfg = Release|Any CPU
 		{B78E807E-7334-413F-81C1-9BDC0E2FDF1E}.Release|x86.Build.0 = Release|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Debug|x64.Build.0 = Debug|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Debug|x86.Build.0 = Debug|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Release|x64.ActiveCfg = Release|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Release|x64.Build.0 = Release|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Release|x86.ActiveCfg = Release|Any CPU
+		{CBD4CE33-3E4F-480B-9993-01731455212F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
