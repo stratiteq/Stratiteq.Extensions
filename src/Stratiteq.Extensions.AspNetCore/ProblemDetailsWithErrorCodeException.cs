@@ -45,8 +45,11 @@ namespace Stratiteq.Extensions.AspNetCore
         /// </summary>
         public void ClearSensitiveInfo()
         {
-            this.ProblemDetailsWithErrorCode.Title = null;
-            this.ProblemDetailsWithErrorCode.Detail = null;
+            if (this.ProblemDetailsWithErrorCode != null)
+            {
+                this.ProblemDetailsWithErrorCode.Title = null;
+                this.ProblemDetailsWithErrorCode.Detail = null;
+            }
         }
     }
 }
