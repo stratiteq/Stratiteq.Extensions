@@ -124,8 +124,11 @@ stages:
     steps:
     - checkout: none
 
-    - download: current
-      artifact: $(artifactName)
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        artifactName: '$(artifactName)'
+        downloadPath: '$(Pipeline.Workspace)'
 
     - task: NuGetToolInstaller@1
       inputs:
