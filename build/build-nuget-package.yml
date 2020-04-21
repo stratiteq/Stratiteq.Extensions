@@ -1,0 +1,58 @@
+# File: build.yml
+parameters:
+- name: buildConfiguration
+  type: string
+  default: 'Release'
+- name: project
+  type: string
+  default: ''
+- name: artifactName
+  type: string
+  default: ''
+- name: sdk
+  type: string
+  default: '3.x'
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET 3.x'
+    inputs:
+      packageType: 'sdk'
+      version: '${{ parameters.sdk }}'
+
+  - task: DotNetCoreCLI@2
+    displayName: "NuGet Restore"
+    inputs:
+      command: restore
+      projects: '**/${{ parameters.project }}'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build'
+    inputs:
+      command: 'build'
+      projects: '**/${{ parameters.project }}'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}' 
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Create NuGet Package - Release Version'
+    inputs:
+      command: pack
+      buildProperties: 'VersionSuffix="$(Build.BuildID)"'
+      packDirectory: '$$(Pipeline.Workspace)/packages/releases'
+      arguments: '--configuration $(buildConfiguration)'
+      nobuild: true
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'Create NuGet Package - Prerelease Version'
+    inputs:
+      command: pack
+      buildProperties: 'VersionSuffix="$(Build.BuildNumber)"'
+      packDirectory: '$$(Pipeline.Workspace)/packages/prereleases'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Artifacts'
+    inputs:
+      targetPath: '$$(Pipeline.Workspace)/packages'
+      artifact: ${{ parameters.artifactName }}
+      publishLocation: 'pipeline'
