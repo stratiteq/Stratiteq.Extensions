@@ -38,6 +38,7 @@ steps:
     inputs:
       command: pack
       buildProperties: 'VersionSuffix="$(Build.BuildID)"'
+      projects: '**/${{ parameters.project }}'
       packDirectory: '$$(Pipeline.Workspace)/packages/releases'
       arguments: '--configuration $(buildConfiguration)'
       nobuild: true
@@ -47,6 +48,7 @@ steps:
     inputs:
       command: pack
       buildProperties: 'VersionSuffix="$(Build.BuildNumber)"'
+      packagesToPack: '**/${{ parameters.project }}'
       packDirectory: '$$(Pipeline.Workspace)/packages/prereleases'
       arguments: '--configuration $(buildConfiguration)'
 
