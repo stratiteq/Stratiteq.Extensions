@@ -43,18 +43,17 @@ stages:
         parameters:
           buildConfiguration: $(buildConfiguration)
           project: 'Stratiteq.Extensions.AspNetCore.csproj'
-        artifactName: $(artifactName)
+          artifactName: $(artifactName)
 
-#- job: Stratiteq.Extensions.AspNetCore.Swagger
-#  displayName: 'Build Stratiteq.Extensions.AspNetCore.Swagger'
+  - job:
+    displayName: 'Build Stratiteq.Extensions.AspNetCore.Swagger'
 
-#  steps:
-#    - template: build-nuget.package.yml
-#      parameters:
-#        buildConfiguration: $(buildConfiguration)
-#        project: 'Stratiteq.Extensions.AspNetCore.Swagger.csproj'
-#        artifactName: $(artifactName)
-        
+    steps:
+      - template: build-nuget.package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.AspNetCore.Swagger.csproj'
+          artifactName: $(artifactName)
 
 
 - stage: 'PublishPrereleaseNuGetPackage'
