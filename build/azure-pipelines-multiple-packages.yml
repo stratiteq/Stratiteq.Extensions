@@ -6,6 +6,9 @@
 trigger:
 - master
 
+pool:
+  vmImage: 'ubuntu-latest'
+
 # Set the build run name. If a this is a PR build prefix with PR otherwise CI.
 variables:
 
@@ -20,18 +23,16 @@ variables:
 name: $(buildVariant)-$(Date:yyyyMMdd)$(Rev:.r)  # build run name
 
 stages:
-
 - stage: 'Build'
+  jobs:
+  - job: Stratiteq.Extensions
+    displayName: 'Build Stratiteq.Extensions'
 
-jobs:
-- job: Stratiteq.Extensions
-  displayName: 'Build Stratiteq.Extensions'
-
-  steps:
-    - template: build-nuget.package.yml
-      parameters:
-        buildConfiguration: $(buildConfiguration)
-        project: 'Stratiteq.Extensions.csproj'
+    steps:
+      - template: build-nuget.package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.csproj'
         artifactName: $(artifactName)
 
 #- job: Stratiteq.Extensions.AspNetCore
