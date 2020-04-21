@@ -25,7 +25,6 @@ steps:
     displayName: 'Create NuGet Package - Release Version'
     inputs:
       command: pack
-      buildProperties: 'VersionSuffix="$(Build.BuildID)"'
       packagesToPack: '**/${{ parameters.project }}'
       packDirectory: '$$(Pipeline.Workspace)/packages/releases'
       arguments: '--configuration $(buildConfiguration)'
