@@ -55,6 +55,17 @@ stages:
           project: 'Stratiteq.Extensions.AspNetCore.Swagger.csproj'
           artifactName: $(artifactName)
 
+  - job:
+    displayName: 'Publish packages'
+  
+    steps:
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish Artifacts'
+        inputs:
+          targetPath: '$$(Pipeline.Workspace)/packages'
+          artifact: ${{ parameters.artifactName }}
+          publishLocation: 'pipeline'
+
 
 - stage: 'PublishPrereleaseNuGetPackage'
   displayName: 'Publish Prerelease NuGet Package'
