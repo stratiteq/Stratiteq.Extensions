@@ -51,3 +51,10 @@ steps:
       packagesToPack: '**/${{ parameters.project }}'
       packDirectory: '$$(Pipeline.Workspace)/packages/prereleases'
       arguments: '--configuration $(buildConfiguration)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifacts'
+    inputs:
+      PathtoPublish: '$$(Pipeline.Workspace)/packages'
+      ArtifactName: ${{ parameters.artifactName }}
+      publishLocation: 'Container'
