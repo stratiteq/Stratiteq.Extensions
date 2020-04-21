@@ -39,7 +39,7 @@ stages:
     displayName: 'Build Stratiteq.Extensions.AspNetCore'
 
     steps:
-      - template: build-nuget.package.yml
+      - template: build-nuget-package.yml
         parameters:
           buildConfiguration: $(buildConfiguration)
           project: 'Stratiteq.Extensions.AspNetCore.csproj'
@@ -49,7 +49,7 @@ stages:
     displayName: 'Build Stratiteq.Extensions.AspNetCore.Swagger'
 
     steps:
-      - template: build-nuget.package.yml
+      - template: build-nuget-package.yml
         parameters:
           buildConfiguration: $(buildConfiguration)
           project: 'Stratiteq.Extensions.AspNetCore.Swagger.csproj'
