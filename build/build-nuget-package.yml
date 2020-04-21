@@ -1,0 +1,47 @@
+# File: build.yml
+parameters:
+- name: buildConfiguration
+  type: string
+  default: 'Release'
+- name: project
+  type: string
+  default: ''
+- name: artifactName
+  type: string
+  default: ''
+- name: sdk
+  type: string
+  default: '3.x'
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'Build'
+    inputs:
+      command: 'build'
+      projects: '**/${{ parameters.project }}'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}' 
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Create NuGet Package - Release Version'
+    inputs:
+      command: pack
+      packagesToPack: '**/${{ parameters.project }}'
+      packDirectory: '$$(Pipeline.Workspace)/packages/releases'
+      arguments: '--configuration $(buildConfiguration)'
+      nobuild: true
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'Create NuGet Package - Prerelease Version'
+    inputs:
+      command: pack
+      buildProperties: 'VersionSuffix="$(Build.BuildNumber)"'
+      packagesToPack: '**/${{ parameters.project }}'
+      packDirectory: '$$(Pipeline.Workspace)/packages/prereleases'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifacts'
+    inputs:
+      PathtoPublish: '$$(Pipeline.Workspace)/packages'
+      ArtifactName: ${{ parameters.artifactName }}
+      publishLocation: 'Container'

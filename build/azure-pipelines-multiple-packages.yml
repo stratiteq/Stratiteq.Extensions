@@ -1,0 +1,173 @@
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# YAML schema reference:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+# Set the build run name. If a this is a PR build prefix with PR otherwise CI.
+variables:
+
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    buildVariant: PR
+  ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    buildVariant: CI
+
+  buildConfiguration: 'Release'
+  artifactName: 'packages'
+  sdkVersion: '3.x'
+
+name: $(buildVariant)-$(Date:yyyyMMdd)$(Rev:.r)  # build run name
+
+stages:
+- stage: Build
+  jobs:
+  - job: Install
+    displayName: 'Install SDK and restore packages'
+
+    steps:
+      - task: UseDotNet@2
+        displayName: 'Use .NET 3.x'
+        inputs:
+          packageType: 'sdk'
+          version: $(sdkVersion)
+
+      - task: DotNetCoreCLI@2
+        displayName: "NuGet Restore"
+        inputs:
+          command: restore
+          projects: '**/*.csproj'
+
+  - job: Build
+    displayName: 'Build Stratiteq.Extensions'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.csproj'
+          artifactName: $(artifactName)
+
+  - job:
+    displayName: 'Build Stratiteq.Extensions.AspNetCore'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.AspNetCore.csproj'
+          artifactName: $(artifactName)
+
+  - job:
+    displayName: 'Build Stratiteq.Extensions.AspNetCore.Swagger'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.AspNetCore.Swagger.csproj'
+          artifactName: $(artifactName)
+
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Configuration'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Configuration.csproj'
+          artifactName: $(artifactName)
+          
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Cryptography'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Cryptography.csproj'
+          artifactName: $(artifactName)
+          
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Hosting'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Hosting.csproj'
+          artifactName: $(artifactName)
+
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Identity'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Identity.csproj'
+          artifactName: $(artifactName)
+
+- stage: 'PublishPrereleaseNuGetPackage'
+  displayName: 'Publish Prerelease NuGet Package'
+  dependsOn: 'Build'
+  condition: succeeded()
+  jobs:
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+    - checkout: none
+
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        artifactName: '$(artifactName)'
+        downloadPath: '$(Pipeline.Workspace)'
+
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '5.*'
+        checkLatest: true
+
+    - task: NuGetCommand@2
+      displayName: 'Push NuGet Package'
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Pipeline.Workspace)/packages/prereleases/*.nupkg;(Pipeline.Workspace)/packages/prereleases/*.snupkg;'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'SQ-Internal-OpenSource-Feed'
+        allowPackageConflicts: true
+        nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
+
+- stage: 'PublishReleaseNuGetPackage'
+  displayName: 'Publish Release NuGet Package'
+  dependsOn: 'PublishPrereleaseNuGetPackage'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  jobs:
+  - deployment:
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: 'nuget-org'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+         - task: NuGetToolInstaller@1
+           inputs:
+            versionSpec: '5.*'
+            checkLatest: true
+
+         - task: NuGetCommand@2
+           displayName: 'Push NuGet Package'
+           inputs:
+             command: 'push'
+             packagesToPush: '$(Pipeline.Workspace)/packages/releases/*.nupkg;$(Pipeline.Workspace)/packages/releases/*.snupkg'
+             nuGetFeedType: 'external'
+             publishFeedCredentials: 'nuget.org'
+             nugetConfigPath: '$(Pipeline.Workspace)/NuGet.config'
