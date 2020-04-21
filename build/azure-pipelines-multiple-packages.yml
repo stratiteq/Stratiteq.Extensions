@@ -35,14 +35,14 @@ stages:
           project: 'Stratiteq.Extensions.csproj'
           artifactName: $(artifactName)
 
-- job:
-  displayName: 'Build Stratiteq.Extensions.AspNetCore'
+  - job:
+    displayName: 'Build Stratiteq.Extensions.AspNetCore'
 
-  steps:
-    - template: build-nuget.package.yml
-      parameters:
-        buildConfiguration: $(buildConfiguration)
-        project: 'Stratiteq.Extensions.AspNetCore.csproj'
+    steps:
+      - template: build-nuget.package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.AspNetCore.csproj'
         artifactName: $(artifactName)
 
 #- job: Stratiteq.Extensions.AspNetCore.Swagger
