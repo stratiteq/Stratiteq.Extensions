@@ -29,7 +29,7 @@ stages:
     displayName: 'Build Stratiteq.Extensions'
 
     steps:
-      - template: build-nuget.package.yml
+      - template: build-nuget-package.yml
         parameters:
           buildConfiguration: $(buildConfiguration)
           project: 'Stratiteq.Extensions.csproj'
