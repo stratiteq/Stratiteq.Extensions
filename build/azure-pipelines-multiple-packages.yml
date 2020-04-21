@@ -63,7 +63,7 @@ stages:
         displayName: 'Publish Artifacts'
         inputs:
           targetPath: '$$(Pipeline.Workspace)/packages'
-          artifact: ${{ parameters.artifactName }}
+          artifact: ${artifactName}
           publishLocation: 'pipeline'
 
 
