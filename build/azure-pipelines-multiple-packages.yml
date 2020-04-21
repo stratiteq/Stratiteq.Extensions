@@ -23,9 +23,9 @@ variables:
 name: $(buildVariant)-$(Date:yyyyMMdd)$(Rev:.r)  # build run name
 
 stages:
-- stage: 'Build'
+- stage: Build
   jobs:
-  - job: 'Stratiteq.Extensions'
+  - job: Build
     displayName: 'Build Stratiteq.Extensions'
 
     steps:
