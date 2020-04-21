@@ -33,7 +33,7 @@ stages:
         parameters:
           buildConfiguration: $(buildConfiguration)
           project: 'Stratiteq.Extensions.csproj'
-        artifactName: $(artifactName)
+          artifactName: $(artifactName)
 
 #- job: Stratiteq.Extensions.AspNetCore
 #  displayName: 'Build Stratiteq.Extensions.AspNetCore'
