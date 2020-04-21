@@ -28,17 +28,19 @@ stages:
   jobs:
   - job: Install
     displayName: 'Install SDK and restore packages'
-    - task: UseDotNet@2
-      displayName: 'Use .NET 3.x'
-      inputs:
-        packageType: 'sdk'
-        version: $(sdkVersion)
 
-    - task: DotNetCoreCLI@2
-      displayName: "NuGet Restore"
-      inputs:
-        command: restore
-        projects: '**/*.csproj'
+    steps:
+      - task: UseDotNet@2
+        displayName: 'Use .NET 3.x'
+        inputs:
+          packageType: 'sdk'
+          version: $(sdkVersion)
+
+      - task: DotNetCoreCLI@2
+        displayName: "NuGet Restore"
+        inputs:
+          command: restore
+          projects: '**/*.csproj'
 
   - job: Build
     displayName: 'Build Stratiteq.Extensions'
