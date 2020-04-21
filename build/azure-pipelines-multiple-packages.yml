@@ -72,6 +72,46 @@ stages:
           project: 'Stratiteq.Extensions.AspNetCore.Swagger.csproj'
           artifactName: $(artifactName)
 
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Configuration'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Configuration.csproj'
+          artifactName: $(artifactName)
+          
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Cryptography'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Cryptography.csproj'
+          artifactName: $(artifactName)
+          
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Hosting'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Hosting.csproj'
+          artifactName: $(artifactName)
+
+  - job:
+    displayName: 'Build Stratiteq.Extensions.Identity'
+
+    steps:
+      - template: build-nuget-package.yml
+        parameters:
+          buildConfiguration: $(buildConfiguration)
+          project: 'Stratiteq.Extensions.Identity.csproj'
+          artifactName: $(artifactName)
+
 - stage: 'PublishPrereleaseNuGetPackage'
   displayName: 'Publish Prerelease NuGet Package'
   dependsOn: 'Build'
