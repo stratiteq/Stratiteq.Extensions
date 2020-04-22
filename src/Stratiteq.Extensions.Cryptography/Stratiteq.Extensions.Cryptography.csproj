@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Methods for finding and reading certificates.</Description>
   </PropertyGroup>
 
 </Project>

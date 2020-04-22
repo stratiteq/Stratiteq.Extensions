@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Configuration classes for AzureAD and CosmosDB as well as extensions to validate IConfiguration objects.</Description>
   </PropertyGroup>
 
   <ItemGroup>
