@@ -9,7 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratiteq.Extensions.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{95B9187B-D477-466F-93E6-5BADA27CDB8F}"
 	ProjectSection(SolutionItems) = preProject
-		build\azure-pipelines.yml = build\azure-pipelines.yml
 		Directory.Build.props = Directory.Build.props
 		LICENSE = LICENSE
 	EndProjectSection
@@ -29,7 +28,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{29E8DD0E-D4D6-4744-B315-115B4C54C0AB}"
 	ProjectSection(SolutionItems) = preProject
 		build\azure-pipelines-multiple-packages.yml = build\azure-pipelines-multiple-packages.yml
-		build\azure-pipelines.yml = build\azure-pipelines.yml
 		build\build-nuget-package.yml = build\build-nuget-package.yml
 	EndProjectSection
 EndProject
