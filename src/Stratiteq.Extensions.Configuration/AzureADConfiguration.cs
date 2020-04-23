@@ -22,9 +22,9 @@ namespace Stratiteq.Extensions.Configuration
         }
 
         /// <summary>
-        /// Gets the AAD instance.
+        /// Gets the Azure AD instance (https://login.microsoftonline.com/).
         /// </summary>
-        public string? Instance { get; internal set; }
+        public string Instance => "https://login.microsoftonline.com/";
 
         /// <summary>
         /// Gets the Azure Active Directory (AAD) application identifier of the web API that the calling application needs authenticated access to.
