@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Stratiteq.Extensions.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
@@ -32,6 +33,17 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
             swaggerUIOptions.OAuthClientId(clientId);
             swaggerUIOptions.OAuthRealm(clientId);
             swaggerUIOptions.OAuthScopeSeparator(" ");
+        }
+
+        public static void ConfigureOauth2Authentication(this SwaggerGenOptions swaggerGenOptions, AzureADConfiguration azureADConfiguration)
+        {
+            ConfigureOauth2Authentication(
+                swaggerGenOptions,
+                azureADConfiguration.Instance,
+                azureADConfiguration.ClientId,
+                azureADConfiguration.TenantId,
+                azureADConfiguration.AppIdentifier,
+                azureADConfiguration.Scopes);
         }
 
         /// <summary>
@@ -71,7 +83,7 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
             string? clientId,
             string? tenantId,
             string? appIdUri,
-            string[] requestedScopes)
+            string?[] requestedScopes)
         {
             if (string.IsNullOrEmpty(instance))
             {

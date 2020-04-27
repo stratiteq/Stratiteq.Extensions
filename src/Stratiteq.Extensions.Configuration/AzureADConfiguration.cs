@@ -49,13 +49,6 @@ namespace Stratiteq.Extensions.Configuration
         public string? ClientId { get; internal set; }
 
         /// <summary>
-        /// Gets the subject name of the certificate that will be loaded and passed along the request to Azure Active Directory (AAD) to get an authentication token.
-        /// The certificate (without the private key, .cer format) must be uploaded to the AAD application itself so that it can verify the certificate.
-        /// The certificate (with the private key, pfx-format) must be uploaded to the web application host (App service or Azure Function).
-        /// </summary>
-        public string? CertificateSubjectName { get; internal set; }
-
-        /// <summary>
         /// Gets the secret string that the application uses to prove its identity when requesting a token. Also can be referred to as application password.
         /// </summary>
         public string? ClientSecret { get; internal set; }
@@ -64,24 +57,24 @@ namespace Stratiteq.Extensions.Configuration
         {
             var errors = new List<ValidationResult>();
 
-            if (string.IsNullOrEmpty(CertificateSubjectName) || string.IsNullOrEmpty(ClientSecret))
+            if (string.IsNullOrEmpty(this.ClientSecret))
             {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, "CertificateSubjectName or ClientSecret")));
+                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.ClientSecret))));
             }
 
-            if (string.IsNullOrEmpty(ClientId))
+            if (string.IsNullOrEmpty(this.ClientId))
             {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(ClientId))));
+                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.ClientId))));
             }
 
-            if (string.IsNullOrEmpty(TenantId))
+            if (string.IsNullOrEmpty(this.TenantId))
             {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(TenantId))));
+                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.TenantId))));
             }
 
-            if (string.IsNullOrEmpty(AppIdentifier))
+            if (string.IsNullOrEmpty(this.AppIdentifier))
             {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(AppIdentifier))));
+                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.AppIdentifier))));
             }
 
             return errors;
