@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Stratiteq.Extensions.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
@@ -22,7 +23,7 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
         /// </summary>
         /// <param name="swaggerUIOptions">the SwaggerUIOptions instance to extend.</param>
         /// <param name="clientId">The ClientId for oauth2 endpoint.</param>
-        public static void ConfigureOauth2Authentication(this SwaggerUIOptions swaggerUIOptions, string clientId)
+        public static void ConfigureOauth2Authentication(this SwaggerUIOptions swaggerUIOptions, string? clientId)
         {
             if (clientId == null)
             {
@@ -32,6 +33,17 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
             swaggerUIOptions.OAuthClientId(clientId);
             swaggerUIOptions.OAuthRealm(clientId);
             swaggerUIOptions.OAuthScopeSeparator(" ");
+        }
+
+        public static void ConfigureOauth2Authentication(this SwaggerGenOptions swaggerGenOptions, AzureADConfiguration azureADConfiguration)
+        {
+            ConfigureOauth2Authentication(
+                swaggerGenOptions,
+                azureADConfiguration.Instance,
+                azureADConfiguration.ClientId,
+                azureADConfiguration.TenantId,
+                azureADConfiguration.AppIdentifier,
+                azureADConfiguration.Scopes);
         }
 
         /// <summary>
@@ -46,10 +58,10 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
         /// <exception cref="ArgumentNullException">Is thrown if any of the input parameters are null.</exception>
         public static void ConfigureOauth2Authentication(
             this SwaggerGenOptions swaggerGenOptions,
-            string instance,
-            string clientId,
-            string tenantId,
-            string appIdUri,
+            string? instance,
+            string? clientId,
+            string? tenantId,
+            string? appIdUri,
             string requestedScope)
         {
             ConfigureOauth2Authentication(swaggerGenOptions, instance, clientId, tenantId, appIdUri, new string[] { requestedScope });
@@ -67,11 +79,11 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
         /// <exception cref="ArgumentNullException">Is thrown if any of the input parameters are null.</exception>
         public static void ConfigureOauth2Authentication(
             this SwaggerGenOptions swaggerGenOptions,
-            string instance,
-            string clientId,
-            string tenantId,
-            string appIdUri,
-            string[] requestedScopes)
+            string? instance,
+            string? clientId,
+            string? tenantId,
+            string? appIdUri,
+            string?[] requestedScopes)
         {
             if (string.IsNullOrEmpty(instance))
             {

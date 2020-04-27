@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Extends the ProblemDetails class with an error code.</Description>
   </PropertyGroup>
 
   <ItemGroup>

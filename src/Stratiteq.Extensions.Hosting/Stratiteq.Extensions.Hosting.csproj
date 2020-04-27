@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Environment names and methods for checking which environment the app is running in.</Description>
   </PropertyGroup>
 
   <ItemGroup>
