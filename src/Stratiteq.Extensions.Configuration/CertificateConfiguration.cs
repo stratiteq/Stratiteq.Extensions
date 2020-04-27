@@ -4,16 +4,15 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
-namespace Stratiteq.Extensions
+namespace Stratiteq.Extensions.Configuration
 {
     /// <summary>
     /// Contains the information needed to make authenticated requests to a web API protected with Azure Active Directory (and role based authentication) using certificates.
     /// </summary>
-    public class CertificateConfiguration : IValidatableObject
+    public class CertificateConfiguration : AzureADConfiguration
     {
-        private const string MissingAppSettingTemplate = "Configuration not valid. App setting \"{0}\" that is required for the application to start is missing.";
-
         /// <summary>
         /// Gets the subject name of the certificate that will be loaded and passed along the request to Azure Active Directory (AAD) to get an authentication token.
         /// The certificate (without the private key, .cer format) must be uploaded to the AAD application itself so that it can verify the certificate.
@@ -21,11 +20,11 @@ namespace Stratiteq.Extensions
         /// </summary>
         public string? CertificateSubjectName { get; internal set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var errors = new List<ValidationResult>();
+            var errors = base.Validate(validationContext).ToList();
 
-            if (string.IsNullOrEmpty(CertificateSubjectName))
+            if (string.IsNullOrEmpty(this.CertificateSubjectName))
             {
                 errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, "CertificateSubjectName")));
             }

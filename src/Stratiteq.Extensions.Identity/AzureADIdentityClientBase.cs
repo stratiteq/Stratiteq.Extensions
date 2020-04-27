@@ -14,20 +14,35 @@ namespace Stratiteq.Extensions.Identity
 {
     /// <summary>
     /// An IIdentityClient implementation using Microsoft.Identity.Client to authenticate against.
+    /// If instance created with an CertificateConfiguration the RequestTokenAsync method will use the certificate as
+    /// authentication agains the authority else the client secret configuration will be used. Either one has to be provided.
     /// </summary>
     public class AzureADIdentityClientBase : IIdentityClient
     {
-        private readonly AzureADConfiguration azureADConfiguration;
+        private readonly ClientSecretConfiguration? clientSecretConfiguration;
         private readonly ILogger<AzureADIdentityClientBase> logger;
+        private readonly CertificateConfiguration? certificateConfiguration;
+
         private IConfidentialClientApplication? confidentialClientApplication;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureADIdentityClientBase"/> class.
         /// </summary>
-        public AzureADIdentityClientBase(AzureADConfiguration azureADConfiguration, ILogger<AzureADIdentityClientBase> logger)
+        /// <param name="clientSecretConfiguration">An instance of ClientSecretConfiguration.</param>
+        public AzureADIdentityClientBase(ClientSecretConfiguration clientSecretConfiguration, ILogger<AzureADIdentityClientBase> logger)
         {
-            this.azureADConfiguration = azureADConfiguration ?? throw new ArgumentNullException(nameof(azureADConfiguration));
+            this.clientSecretConfiguration = clientSecretConfiguration ?? throw new ArgumentNullException(nameof(clientSecretConfiguration));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureADIdentityClientBase"/> class.
+        /// </summary>
+        /// <param name="certificateConfiguration">An instance of CertificateConfiguration.</param>
+        public AzureADIdentityClientBase(CertificateConfiguration certificateConfiguration, ILogger<AzureADIdentityClientBase> logger)
+        {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.certificateConfiguration = certificateConfiguration ?? throw new ArgumentNullException(nameof(certificateConfiguration));
         }
 
         /// <inheritdoc/>
@@ -37,18 +52,18 @@ namespace Stratiteq.Extensions.Identity
 
             if (this.confidentialClientApplication == null)
             {
-                if (!string.IsNullOrEmpty(this.azureADConfiguration.CertificateSubjectName))
+                if (this.certificateConfiguration != null)
                 {
-                    this.confidentialClientApplication = ConfidentialClientApplicationBuilder.Create(this.azureADConfiguration.ClientId)
-                        .WithCertificate(CertificateFinder.FindBySubjectName(this.azureADConfiguration.CertificateSubjectName, DateTime.UtcNow))
-                        .WithAuthority(AzureCloudInstance.AzurePublic, this.azureADConfiguration?.TenantId)
+                    this.confidentialClientApplication = ConfidentialClientApplicationBuilder.Create(this.clientSecretConfiguration?.ClientId)
+                        .WithCertificate(CertificateFinder.FindBySubjectName(this.certificateConfiguration.CertificateSubjectName, DateTime.UtcNow))
+                        .WithAuthority(AzureCloudInstance.AzurePublic, this.clientSecretConfiguration?.TenantId)
                         .Build();
                 }
                 else
                 {
-                    this.confidentialClientApplication = ConfidentialClientApplicationBuilder.Create(this.azureADConfiguration.ClientId)
-                        .WithClientSecret(this.azureADConfiguration.ClientSecret)
-                        .WithAuthority(AzureCloudInstance.AzurePublic, this.azureADConfiguration.TenantId)
+                    this.confidentialClientApplication = ConfidentialClientApplicationBuilder.Create(this.clientSecretConfiguration?.ClientId)
+                        .WithClientSecret(this.clientSecretConfiguration?.ClientSecret)
+                        .WithAuthority(AzureCloudInstance.AzurePublic, this.clientSecretConfiguration?.TenantId)
                         .Build();
                 }
             }
@@ -56,7 +71,7 @@ namespace Stratiteq.Extensions.Identity
             AuthenticationResult? result;
             try
             {
-                result = await this.confidentialClientApplication.AcquireTokenForClient(this.azureADConfiguration?.Scopes)
+                result = await this.confidentialClientApplication.AcquireTokenForClient(this.clientSecretConfiguration?.Scopes)
                     .ExecuteAsync();
 
                 this.logger?.LogInformation("Token requested successfully.");
