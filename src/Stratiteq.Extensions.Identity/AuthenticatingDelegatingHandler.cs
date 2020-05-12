@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Stratiteq.Identity.Client
+namespace Stratiteq.Extensions.Identity
 {
     /// <summary>
     /// A delegating handler that authenticates with an IIdentityClient.
@@ -32,11 +32,11 @@ namespace Stratiteq.Identity.Client
         /// <inheritdoc/>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            string? accessToken = await this.identityClient.RequestTokenAsync();
+            var accessToken = await this.identityClient.RequestTokenAsync();
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized)
                 {
                     Content = new StringContent("Could not get access token from endpoint."),
                 };
