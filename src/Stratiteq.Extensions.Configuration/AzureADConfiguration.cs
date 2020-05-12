@@ -110,6 +110,17 @@ namespace Stratiteq.Extensions.Configuration
                 errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.Scopes))));
             }
 
+            if (this.Scopes != null)
+            {
+                foreach (var scope in this.Scopes)
+                {
+                    if (string.IsNullOrEmpty(scope))
+                    {
+                        errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.Scopes))));
+                    }
+                }
+            }
+
             return errors;
         }
     }
