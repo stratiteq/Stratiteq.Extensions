@@ -24,7 +24,7 @@ namespace Stratiteq.Extensions.Configuration
             this.CertificateSubjectName = configuration["CertificateSubjectName"];
         }
 
-        public CertificateConfiguration(string? certificateSubjectName, string? appIdentifier, string? tenantId, string? clientId, string[] scopes)
+        public CertificateConfiguration(string? certificateSubjectName, string? appIdentifier, string? tenantId, string? clientId, string?[] scopes)
             : base(appIdentifier, tenantId, clientId, scopes)
         {
             this.CertificateSubjectName = certificateSubjectName ?? throw new System.ArgumentNullException(nameof(certificateSubjectName));
@@ -36,29 +36,29 @@ namespace Stratiteq.Extensions.Configuration
             this.AppIdentifier = appIdentifier;
         }
 
-        public CertificateConfiguration(string? certificateSubjectName, AzureADConfiguration azureADConfiguration)
+        public CertificateConfiguration(string? certificateSubjectName, AzureADConfiguration? azureADConfiguration)
             : this(
                 certificateSubjectName,
                 azureADConfiguration?.AppIdentifier,
                 azureADConfiguration?.TenantId,
                 azureADConfiguration?.ClientId,
-                azureADConfiguration?.Scopes)
+                azureADConfiguration?.Scopes!)
         {
         }
 
-        public CertificateConfiguration(string appIdentifier, CertificateConfiguration certificateConfiguration)
+        public CertificateConfiguration(string appIdentifier, CertificateConfiguration? certificateConfiguration)
             : this(certificateConfiguration)
         {
             this.AppIdentifier = appIdentifier;
         }
 
-        private CertificateConfiguration(CertificateConfiguration certificateConfiguration)
+        private CertificateConfiguration(CertificateConfiguration? certificateConfiguration)
             : this(
-                certificateConfiguration.CertificateSubjectName,
+                certificateConfiguration?.CertificateSubjectName,
                 certificateConfiguration?.AppIdentifier,
                 certificateConfiguration?.TenantId,
                 certificateConfiguration?.ClientId,
-                certificateConfiguration?.Scopes)
+                certificateConfiguration?.Scopes!)
         {
         }
 

@@ -3,9 +3,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Stratiteq.Extensions.Configuration
 {
@@ -34,10 +34,10 @@ namespace Stratiteq.Extensions.Configuration
 
         public AzureADConfiguration(string? appIdentifier, string? tenantId, string? clientId, string?[] scopes)
         {
-            this.AppIdentifier = appIdentifier;
-            this.TenantId = tenantId;
-            this.ClientId = clientId;
-            this.Scopes = scopes;
+            this.AppIdentifier = appIdentifier ?? throw new ArgumentNullException(nameof(appIdentifier));
+            this.TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
+            this.ClientId = clientId ?? throw new ArgumentNullException(nameof(clientId));
+            this.Scopes = scopes ?? throw new System.ArgumentNullException(nameof(scopes));
         }
 
         public AzureADConfiguration(AzureADConfiguration azureADConfiguration)
