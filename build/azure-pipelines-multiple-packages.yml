@@ -112,6 +112,17 @@ stages:
           project: 'Stratiteq.Extensions.Identity.csproj'
           artifactName: $(artifactName)
 
+  - job:
+    displayName: 'Test'
+
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Test'
+        inputs:
+          command: 'test'
+          project: '**/*.csproj'
+          buildConfiguration: $(buildConfiguration)
+
 - stage: 'PublishPrereleaseNuGetPackage'
   displayName: 'Publish Prerelease NuGet Package'
   dependsOn: 'Build'

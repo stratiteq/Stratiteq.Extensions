@@ -10,6 +10,7 @@ namespace Stratiteq.Extensions.Configuration
     public class CosmosDBConfiguration : IValidatableObject
     {
         private const string MissingAppSettingTemplate = "Configuration not valid. App setting \"{0}\" that is required for the application to start is missing.";
+        private const string ConnectionStringTemplate = "AccountEndpoint={0};AccountKey={1}";
 
         public CosmosDBConfiguration()
         {
@@ -19,18 +20,20 @@ namespace Stratiteq.Extensions.Configuration
 
         public string? CosmosDbPrimaryKey { get; private set; }
 
+        public string? ConnectionString => string.Format(ConnectionStringTemplate, this.CosmosDbAccountEndpoint, this.CosmosDbPrimaryKey);
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
 
-            if (string.IsNullOrEmpty(CosmosDbAccountEndpoint))
+            if (string.IsNullOrEmpty(this.CosmosDbAccountEndpoint))
             {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(CosmosDbAccountEndpoint))));
+                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.CosmosDbAccountEndpoint))));
             }
 
-            if (string.IsNullOrEmpty(CosmosDbPrimaryKey))
+            if (string.IsNullOrEmpty(this.CosmosDbPrimaryKey))
             {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(CosmosDbPrimaryKey))));
+                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.CosmosDbPrimaryKey))));
             }
 
             return errors;

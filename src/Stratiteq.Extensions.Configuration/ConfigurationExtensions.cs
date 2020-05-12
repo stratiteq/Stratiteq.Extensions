@@ -15,5 +15,14 @@ namespace Stratiteq.Extensions.Configuration
             Validator.ValidateObject(obj, new ValidationContext(obj), true);
             return obj;
         }
+
+        public static AzureADConfiguration GetValid(this IConfiguration configuration, string appIdentifier)
+        {
+            var obj = configuration.Get<AzureADConfiguration>(c => c.BindNonPublicProperties = true);
+            obj.AppIdentifier = appIdentifier;
+
+            Validator.ValidateObject(obj, new ValidationContext(obj), true);
+            return obj;
+        }
     }
 }

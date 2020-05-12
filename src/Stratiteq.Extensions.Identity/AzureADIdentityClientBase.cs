@@ -54,9 +54,9 @@ namespace Stratiteq.Extensions.Identity
             {
                 if (this.certificateConfiguration != null)
                 {
-                    this.confidentialClientApplication = ConfidentialClientApplicationBuilder.Create(this.clientSecretConfiguration?.ClientId)
-                        .WithCertificate(CertificateFinder.FindBySubjectName(this.certificateConfiguration.CertificateSubjectName, DateTime.UtcNow))
-                        .WithAuthority(AzureCloudInstance.AzurePublic, this.clientSecretConfiguration?.TenantId)
+                    this.confidentialClientApplication = ConfidentialClientApplicationBuilder.Create(this.certificateConfiguration?.ClientId)
+                        .WithCertificate(CertificateFinder.FindBySubjectName(this.certificateConfiguration?.CertificateSubjectName, DateTime.UtcNow))
+                        .WithAuthority(AzureCloudInstance.AzurePublic, this.certificateConfiguration?.TenantId)
                         .Build();
                 }
                 else
@@ -71,7 +71,9 @@ namespace Stratiteq.Extensions.Identity
             AuthenticationResult? result;
             try
             {
-                result = await this.confidentialClientApplication.AcquireTokenForClient(this.clientSecretConfiguration?.Scopes)
+                var scopes = this.certificateConfiguration != null ? this.certificateConfiguration.Scopes : this.clientSecretConfiguration?.Scopes;
+
+                result = await this.confidentialClientApplication.AcquireTokenForClient(scopes)
                     .ExecuteAsync();
 
                 this.logger?.LogInformation("Token requested successfully.");
