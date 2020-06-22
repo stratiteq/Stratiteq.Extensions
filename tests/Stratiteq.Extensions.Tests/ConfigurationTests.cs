@@ -84,6 +84,18 @@ namespace Stratiteq.Extensions.Configuration
         }
 
         [Test]
+        public void Configuration_With_Missing_AppIdentifier_Should_Fail()
+        {
+            var azureADConfiguration = new AzureADConfiguration(
+                string.Empty,
+                "TestTenantId",
+                "TestClientId",
+                new[] { "TestScope" });
+
+            Assert.Throws<ValidationException>(() => Validator.ValidateObject(azureADConfiguration, new ValidationContext(azureADConfiguration)));
+        }
+
+        [Test]
         public void Invalid_CertificateConfiguration_With_Invalid_Scope_Should_Fail_Validation()
         {
             var certificateConfiguration = new CertificateConfiguration(

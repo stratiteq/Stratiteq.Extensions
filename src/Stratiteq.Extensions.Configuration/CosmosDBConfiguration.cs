@@ -20,7 +20,11 @@ namespace Stratiteq.Extensions.Configuration
 
         public string? CosmosDbPrimaryKey { get; private set; }
 
-        public string? ConnectionString => string.Format(ConnectionStringTemplate, this.CosmosDbAccountEndpoint, this.CosmosDbPrimaryKey);
+        public string? AccountEndpoint { get; private set; }
+
+        public string? PrimaryKey { get; private set; }
+
+        public string? ConnectionString => string.Format(ConnectionStringTemplate, this.AccountEndpoint ?? this.CosmosDbAccountEndpoint, this.PrimaryKey ?? this.CosmosDbPrimaryKey);
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
