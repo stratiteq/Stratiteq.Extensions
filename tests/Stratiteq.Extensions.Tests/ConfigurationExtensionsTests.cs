@@ -43,20 +43,24 @@ namespace Stratiteq.Extensions.Tests
         [Test]
         public void Invalid_Configuration_Should_Fail_Validation()
         {
-            Assert.Throws<ValidationException>(() =>
-            {
-                this.configuration?.GetSection("InvalidConfiguration1").GetValid<AzureADConfiguration>();
-            });
+            Assert.Throws<ValidationException>(() => this.configuration?.GetSection("InvalidConfiguration1").GetValid<AzureADConfiguration>());
+        }
+
+        [Test]
+        public void Configuration_With_Missing_AppIdentifier_Should_Fail()
+        {
+            Assert.Throws<ValidationException>(() => this.configuration.GetSection("InvalidConfiguration3").GetValid<AzureADConfiguration>());
         }
 
         [Test]
         public void GetConfigurationWithAppIdentifier()
         {
             var validConfiguration =
-                this.configuration.GetSection("Configuration1").GetValid("AppIdentifier");
+                this.configuration.GetSection("Configuration1").GetValid<AzureADConfiguration>("AppIdentifier");
 
             Assert.IsNotNull(validConfiguration);
             Assert.AreEqual(validConfiguration.AppIdentifier, "AppIdentifier");
         }
+
     }
 }
