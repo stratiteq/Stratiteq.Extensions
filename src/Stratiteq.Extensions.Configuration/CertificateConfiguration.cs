@@ -3,9 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Stratiteq.Extensions.Configuration
 {
@@ -67,18 +65,7 @@ namespace Stratiteq.Extensions.Configuration
         /// The certificate (without the private key, .cer format) must be uploaded to the AAD application itself so that it can verify the certificate.
         /// The certificate (with the private key, pfx-format) must be uploaded to the web application host (App service or Azure Function).
         /// </summary>
+        [Required]
         public string? CertificateSubjectName { get; internal set; }
-
-        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = base.Validate(validationContext).ToList();
-
-            if (string.IsNullOrEmpty(this.CertificateSubjectName))
-            {
-                errors.Add(new ValidationResult(string.Format(MissingAppSettingTemplate, "CertificateSubjectName")));
-            }
-
-            return errors;
-        }
     }
 }
