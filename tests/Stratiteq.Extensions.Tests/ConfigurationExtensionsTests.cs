@@ -61,6 +61,5 @@ namespace Stratiteq.Extensions.Tests
             Assert.IsNotNull(validConfiguration);
             Assert.AreEqual(validConfiguration.AppIdentifier, "AppIdentifier");
         }
-
     }
 }

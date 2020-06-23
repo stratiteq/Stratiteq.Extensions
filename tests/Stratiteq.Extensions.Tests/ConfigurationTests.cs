@@ -4,6 +4,7 @@
 
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 
@@ -114,7 +115,7 @@ namespace Stratiteq.Extensions.Configuration
             var azureADConfiguration = new AzureADConfiguration(configuration.GetSection("Configuration1"));
 
             Assert.NotNull(azureADConfiguration);
-            Assert.DoesNotThrow(() => azureADConfiguration.Validate());
+            Assert.DoesNotThrow(() => Validator.ValidateObject(azureADConfiguration, new ValidationContext(azureADConfiguration), true));
         }
 
         [Test]
@@ -124,9 +125,11 @@ namespace Stratiteq.Extensions.Configuration
             var azureADConfiguration = new AzureADConfiguration(configuration.GetSection("InvalidConfiguration2"));
 
             // Act
-            var validationResults = azureADConfiguration.Validate();
+            var validationResults = new List<ValidationResult>();
+            var success = Validator.TryValidateObject(azureADConfiguration, new ValidationContext(azureADConfiguration), validationResults, true);
 
             // Assert
+            Assert.IsFalse(success);
             Assert.NotNull(validationResults);
         }
     }
