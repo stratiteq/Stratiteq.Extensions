@@ -32,12 +32,12 @@ namespace Stratiteq.Extensions.Configuration
         {
         }
 
-        public AzureADConfiguration(string? appIdentifier, string? tenantId, string? clientId, string?[] scopes)
+        public AzureADConfiguration(string? appIdentifier, string? tenantId, string? clientId, string[] scopes = null!)
         {
             this.AppIdentifier = appIdentifier ?? throw new ArgumentNullException(nameof(appIdentifier));
             this.TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
             this.ClientId = clientId ?? throw new ArgumentNullException(nameof(clientId));
-            this.Scopes = scopes ?? throw new System.ArgumentNullException(nameof(scopes));
+            this.Scopes = scopes ?? new string[] { $"{appIdentifier}/.default" };
         }
 
         public AzureADConfiguration(AzureADConfiguration azureADConfiguration)
@@ -47,6 +47,14 @@ namespace Stratiteq.Extensions.Configuration
                 azureADConfiguration.ClientId,
                 azureADConfiguration.Scopes)
         {
+        }
+
+        public AzureADConfiguration(string appIdentifier, AzureADConfiguration azureADConfiguration)
+            : this(azureADConfiguration)
+        {
+            this.AppIdentifier = appIdentifier;
+            // The .default scope is a built-in scope for every application that refers to the static list of permissions configured on the application registration.
+            this.Scopes = new string[] { $"{appIdentifier}/.default" };
         }
 
         /// <summary>
@@ -68,8 +76,9 @@ namespace Stratiteq.Extensions.Configuration
 
         /// <summary>
         /// Gets the scopes the application requests.
+        /// If no scope/s are provided the default scope is used. The "/.default" scope is a built-in scope for every application that refers to the static list of permissions configured on the application registration.
         /// </summary>
-        public string?[] Scopes { get; internal set; } = default!;
+        public string[] Scopes { get; internal set; } = default!;
 
         /// <summary>
         /// Gets the tenant id of the Azure Active Directory (AAD) that hosts the application that is requesting access to another application.
@@ -86,18 +95,13 @@ namespace Stratiteq.Extensions.Configuration
 
         public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (this.Scopes == null || this.Scopes?.Length == 0)
-            {
-                yield return new ValidationResult(string.Format(MissingAppSettingTemplate, nameof(this.Scopes)));
-            }
-
             if (this.Scopes != null)
             {
                 foreach (var scope in this.Scopes)
                 {
-                    if (string.IsNullOrEmpty(scope))
+                    if (UriUtilities.GetValidUri(scope) == null)
                     {
-                        yield return new ValidationResult("Configuration must have 1 or more scopes which is non null", new string[] { nameof(this.Scopes) });
+                        yield return new ValidationResult("Configuration contains scopes but they are not in a valid form", new string[] { nameof(this.Scopes) });
                     }
                 }
             }

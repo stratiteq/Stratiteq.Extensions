@@ -42,8 +42,7 @@ namespace Stratiteq.Extensions.Configuration
             var azureADConfiguration = new AzureADConfiguration(
                 "TestAppIdentifier",
                 "TestTenantId",
-                "TestClientId",
-                new[] { "TestScope" });
+                "TestClientId");
 
             // Act
             var certificateConfiguration = new CertificateConfiguration("TestSubjectName", azureADConfiguration);
@@ -66,7 +65,7 @@ namespace Stratiteq.Extensions.Configuration
                 "TestAppIdentifier",
                 "TestTenantId",
                 "TestClientId",
-                new[] { "TestScope" });
+                new[] { "test://testscope" });
 
             Assert.DoesNotThrow(() => Validator.ValidateObject(certificateConfiguration, new ValidationContext(certificateConfiguration)));
         }
