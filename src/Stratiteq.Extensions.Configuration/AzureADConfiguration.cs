@@ -32,7 +32,7 @@ namespace Stratiteq.Extensions.Configuration
         {
         }
 
-        public AzureADConfiguration(string? appIdentifier, string? tenantId, string? clientId, string[]? scopes = null)
+        public AzureADConfiguration(string? appIdentifier, string? tenantId, string? clientId, string[] scopes = null!)
         {
             this.AppIdentifier = appIdentifier ?? throw new ArgumentNullException(nameof(appIdentifier));
             this.TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
