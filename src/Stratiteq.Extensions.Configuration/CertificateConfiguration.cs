@@ -22,32 +22,27 @@ namespace Stratiteq.Extensions.Configuration
             this.CertificateSubjectName = configuration["CertificateSubjectName"];
         }
 
-        public CertificateConfiguration(string? certificateSubjectName, string? appIdentifier, string? tenantId, string? clientId, string?[] scopes)
+        public CertificateConfiguration(string? certificateSubjectName, string? appIdentifier, string? tenantId, string? clientId, string[] scopes)
             : base(appIdentifier, tenantId, clientId, scopes)
         {
             this.CertificateSubjectName = certificateSubjectName ?? throw new System.ArgumentNullException(nameof(certificateSubjectName));
         }
 
-        public CertificateConfiguration(string? certificateSubjectName, string? appIdentifier, AzureADConfiguration azureADConfiguration)
-            : this(certificateSubjectName, azureADConfiguration)
+        public CertificateConfiguration(string certificateSubjectName, AzureADConfiguration azureADConfiguration)
+            : base(azureADConfiguration)
         {
-            this.AppIdentifier = appIdentifier;
+            this.CertificateSubjectName = certificateSubjectName ?? throw new System.ArgumentNullException(nameof(certificateSubjectName));
         }
 
-        public CertificateConfiguration(string? certificateSubjectName, AzureADConfiguration? azureADConfiguration)
-            : this(
-                certificateSubjectName,
-                azureADConfiguration?.AppIdentifier,
-                azureADConfiguration?.TenantId,
-                azureADConfiguration?.ClientId,
-                azureADConfiguration?.Scopes!)
+        public CertificateConfiguration(string certificateSubjectName, string appIdentifier, AzureADConfiguration azureADConfiguration)
+            : base(appIdentifier, azureADConfiguration)
         {
+            this.CertificateSubjectName = certificateSubjectName ?? throw new System.ArgumentNullException(nameof(certificateSubjectName));
         }
 
-        public CertificateConfiguration(string appIdentifier, CertificateConfiguration? certificateConfiguration)
-            : this(certificateConfiguration)
+        public CertificateConfiguration(string appIdentifier, CertificateConfiguration certificateConfiguration)
+            : this(certificateConfiguration.CertificateSubjectName!, appIdentifier, certificateConfiguration)
         {
-            this.AppIdentifier = appIdentifier;
         }
 
         private CertificateConfiguration(CertificateConfiguration? certificateConfiguration)

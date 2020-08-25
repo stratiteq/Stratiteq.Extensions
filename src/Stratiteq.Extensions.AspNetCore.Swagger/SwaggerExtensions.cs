@@ -35,6 +35,11 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
             swaggerUIOptions.OAuthScopeSeparator(" ");
         }
 
+        /// <summary>
+        /// Configure SwaggerGenOptions for oauth2 authentication.
+        /// </summary>
+        /// <param name="swaggerGenOptions">The SwaggerGenOptions instance to extend.</param>
+        /// <param name="azureADConfiguration">The configuration for authentication.</param>
         public static void ConfigureOauth2Authentication(this SwaggerGenOptions swaggerGenOptions, AzureADConfiguration azureADConfiguration)
         {
             ConfigureOauth2Authentication(
@@ -50,21 +55,17 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
         /// Configure SwaggerGenOptions for oauth2 authentication.
         /// </summary>
         /// <param name="swaggerGenOptions">The SwaggerGenOptions instance to extend.</param>
-        /// <param name="instance">The oauth2 endpoint.</param>
-        /// <param name="clientId">The ClientId for oauth2 endpoint.</param>
-        /// <param name="tenantId">The TenantId.</param>
-        /// <param name="appIdUri">The globally unique URI used to identify the web API. It is the prefix for scopes and in access tokens, it is the value of the audience claim. Also referred to as an identifier URI.</param>
-        /// <param name="requestedScope">The scope that the application requests.</param>
-        /// <exception cref="ArgumentNullException">Is thrown if any of the input parameters are null.</exception>
-        public static void ConfigureOauth2Authentication(
-            this SwaggerGenOptions swaggerGenOptions,
-            string? instance,
-            string? clientId,
-            string? tenantId,
-            string? appIdUri,
-            string requestedScope)
+        /// <param name="azureADConfiguration">The configuration for authentication.</param>
+        /// <param name="requestedScopes">The scopes that the application requests.</param>
+        public static void ConfigureOauth2Authentication(this SwaggerGenOptions swaggerGenOptions, AzureADConfiguration azureADConfiguration, string[] requestedScopes)
         {
-            ConfigureOauth2Authentication(swaggerGenOptions, instance, clientId, tenantId, appIdUri, new string[] { requestedScope });
+            ConfigureOauth2Authentication(
+                swaggerGenOptions,
+                azureADConfiguration.Instance,
+                azureADConfiguration.ClientId,
+                azureADConfiguration.TenantId,
+                azureADConfiguration.AppIdentifier,
+                requestedScopes);
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Stratiteq.Extensions.AspNetCore.Swagger
             string? clientId,
             string? tenantId,
             string? appIdUri,
-            string?[] requestedScopes)
+            string[] requestedScopes)
         {
             if (string.IsNullOrEmpty(instance))
             {

@@ -33,6 +33,14 @@ namespace Stratiteq.Extensions.Tests
         }
 
         [Test]
+        public void Get_Valid_AzureADConfiguration_With_Default_Scopes()
+        {
+            var validConfiguration = this.configuration.GetSection("Configuration2").GetValid<AzureADConfiguration>();
+
+            Assert.IsNotNull(validConfiguration);
+        }
+
+        [Test]
         public void Get_Valid_CertificateConfiguration()
         {
             var validConfiguration = this.configuration.GetSection("CertificateConfiguration1").GetValid<CertificateConfiguration>();
@@ -53,13 +61,35 @@ namespace Stratiteq.Extensions.Tests
         }
 
         [Test]
+        public void Configuration_With_Invalid_AppIdentifier_Should_Fail()
+        {
+            Assert.Throws<ValidationException>(() => this.configuration.GetSection("InvalidConfiguration4").GetValidUri("AppIdentifier"));
+        }
+
+        [Test]
+        public void Configuration_With_Missing_Key_Should_Fail()
+        {
+            Assert.Throws<ValidationException>(() => this.configuration.GetSection("InvalidConfiguration4").GetValidValue<string>("TenantId"));
+        }
+
+        [Test]
         public void GetConfigurationWithAppIdentifier()
         {
             var validConfiguration =
-                this.configuration.GetSection("Configuration1").GetValid<AzureADConfiguration>("AppIdentifier");
+                this.configuration.GetSection("Configuration1").GetValid<AzureADConfiguration>("http://AppIdentifier");
 
             Assert.IsNotNull(validConfiguration);
-            Assert.AreEqual(validConfiguration.AppIdentifier, "AppIdentifier");
+            Assert.AreEqual(validConfiguration.AppIdentifier, "http://AppIdentifier");
+        }
+
+        [Test]
+        public void Configuration_With_Different_AppIdentifier_Should_Have_Default_Scope()
+        {
+            var validConfiguration =
+                this.configuration.GetSection("Configuration2").GetValid<AzureADConfiguration>("http://AppIdentifier");
+
+            Assert.IsNotNull(validConfiguration);
+            Assert.AreEqual(validConfiguration.Scopes[0], "http://AppIdentifier/.default");
         }
     }
 }
