@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Newtonsoft.Json;
 
 namespace Stratiteq.Extensions.AspNetCore
 {
@@ -25,6 +26,7 @@ namespace Stratiteq.Extensions.AspNetCore
         /// <summary>
         /// Gets the unique code for identifying the specific error within this API.
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "errorCode")]
         public string ErrorCode { get; }
 
         /// <summary>
