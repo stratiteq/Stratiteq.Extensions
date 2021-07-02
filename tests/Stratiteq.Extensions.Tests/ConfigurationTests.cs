@@ -45,7 +45,7 @@ namespace Stratiteq.Extensions.Configuration
                 "TestClientId");
 
             // Act
-            var certificateConfiguration = new CertificateConfiguration("TestSubjectName", azureADConfiguration);
+            var certificateConfiguration = new CertificateConfiguration("TestSubjectName", "TestThumbprint", azureADConfiguration);
             var certificateConfiguration2 = new CertificateConfiguration("service2AppIdentifier", certificateConfiguration);
 
             // Assert
@@ -62,6 +62,7 @@ namespace Stratiteq.Extensions.Configuration
         {
             var certificateConfiguration = new CertificateConfiguration(
                 "TestSubjectName",
+                "TestThumbprint",
                 "TestAppIdentifier",
                 "TestTenantId",
                 "TestClientId",
@@ -75,6 +76,7 @@ namespace Stratiteq.Extensions.Configuration
         {
             var certificateConfiguration = new CertificateConfiguration(
                 string.Empty,
+                "TestThumbprint",
                 "TestAppIdentifier",
                 "TestTenantId",
                 "TestClientId",
@@ -100,6 +102,7 @@ namespace Stratiteq.Extensions.Configuration
         {
             var certificateConfiguration = new CertificateConfiguration(
                 "TestSubjectName",
+                "TestThumbprint",
                 "TestAppIdentifier",
                 "TestTenantId",
                 "TestClientId",
