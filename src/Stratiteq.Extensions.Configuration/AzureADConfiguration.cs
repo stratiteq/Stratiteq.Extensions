@@ -63,9 +63,9 @@ namespace Stratiteq.Extensions.Configuration
         public string Instance => "https://login.microsoftonline.com/";
 
         /// <summary>
-        /// Gets the Azure AD token issuer;
+        /// Gets the Azure AD token issuer
         /// </summary>
-        public string Issuer => "https://sts.windows.net/";
+        public string Issuer => this.Instance;
 
         /// <summary>
         /// Gets the Azure Active Directory (AAD) application identifier of the web API that the calling application needs authenticated access to.
